@@ -15,6 +15,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
@@ -28,13 +29,14 @@ QT_BEGIN_NAMESPACE
 class Ui_PCAViewerClass
 {
 public:
-    QAction *actionLoadPcd;
+    QAction *actionLoad_PCD;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTextEdit *tbPcdFilePath;
     QPushButton *btnLoadPcd;
     QVTKOpenGLWidget *openGLWidget;
     QMenuBar *menuBar;
+    QMenu *menuFile;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -46,8 +48,8 @@ public:
         QIcon icon;
         icon.addFile(QStringLiteral(":/Icons/E:/icons/if_cloud_1805075.ico"), QSize(), QIcon::Normal, QIcon::Off);
         PCAViewerClass->setWindowIcon(icon);
-        actionLoadPcd = new QAction(PCAViewerClass);
-        actionLoadPcd->setObjectName(QStringLiteral("actionLoadPcd"));
+        actionLoad_PCD = new QAction(PCAViewerClass);
+        actionLoad_PCD->setObjectName(QStringLiteral("actionLoad_PCD"));
         centralWidget = new QWidget(PCAViewerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -77,6 +79,8 @@ public:
         menuBar = new QMenuBar(PCAViewerClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 646, 21));
+        menuFile = new QMenu(menuBar);
+        menuFile->setObjectName(QStringLiteral("menuFile"));
         PCAViewerClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(PCAViewerClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -85,7 +89,11 @@ public:
         statusBar->setObjectName(QStringLiteral("statusBar"));
         PCAViewerClass->setStatusBar(statusBar);
 
+        menuBar->addAction(menuFile->menuAction());
+        menuFile->addAction(actionLoad_PCD);
+
         retranslateUi(PCAViewerClass);
+        QObject::connect(btnLoadPcd, SIGNAL(clicked()), actionLoad_PCD, SLOT(trigger()));
 
         QMetaObject::connectSlotsByName(PCAViewerClass);
     } // setupUi
@@ -93,17 +101,15 @@ public:
     void retranslateUi(QMainWindow *PCAViewerClass)
     {
         PCAViewerClass->setWindowTitle(QApplication::translate("PCAViewerClass", "Point Cloud Analyser", nullptr));
-        actionLoadPcd->setText(QApplication::translate("PCAViewerClass", "LoadPcd", nullptr));
-#ifndef QT_NO_TOOLTIP
-        actionLoadPcd->setToolTip(QApplication::translate("PCAViewerClass", "This loads the PCD file to the 3D View", nullptr));
-#endif // QT_NO_TOOLTIP
+        actionLoad_PCD->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
         tbPcdFilePath->setHtml(QApplication::translate("PCAViewerClass", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\SACViewer\\PcdData\\PlatformScan.pcd </p></body></html>", nullptr));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\PointCloudAnalyser\\PcdData\\test_pcd_file.pcd</p></body></html>", nullptr));
         tbPcdFilePath->setPlaceholderText(QApplication::translate("PCAViewerClass", "** place the path to the *.pcd file here, than press Load PCD **", nullptr));
         btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
+        menuFile->setTitle(QApplication::translate("PCAViewerClass", "File", nullptr));
     } // retranslateUi
 
 };

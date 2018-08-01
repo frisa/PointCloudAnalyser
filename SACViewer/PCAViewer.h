@@ -16,5 +16,8 @@ private:
 	vtkSmartPointer<vtkGenericOpenGLRenderWindow> _window;
 	Ui::PCAViewerClass ui;
 	void setupVtk();
-	bool loadPcdToViewer(QString pcdFilePath);
+	void connectActions();
+
+public slots:
+	void loadPcdFile();
 };

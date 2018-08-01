@@ -4,14 +4,20 @@
 #include "vtkSphereSource.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkCylinderSource.h"
-
-#include <pcl/io/pcd_io.h>
+#include "PclPersistor.h"
 
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	setupVtk();
+	connectActions();
+}
+
+void PCAViewer::loadPcdFile()
+{
+	PclPersistor pclPers;
+	pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText());
 }
 
 void PCAViewer::setupVtk()
@@ -36,9 +42,7 @@ void PCAViewer::setupVtk()
 	ui.openGLWidget->SetRenderWindow(_window.Get());
 }
 
-bool PCAViewer::loadPcdToViewer(QString pcdFilePath)
+void PCAViewer::connectActions()
 {
-	pcl::PCLPointCloud2 cloud;
-	//pcl::io::loadPCDFile(pcdFilePath.toStdString(), cloud);
-	return true;
+	connect(ui.actionLoad_PCD, &QAction::triggered, this, &PCAViewer::loadPcdFile);
 }

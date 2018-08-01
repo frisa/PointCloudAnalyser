@@ -32,7 +32,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;c:\_git\SACViewer\PcdData\PlatformScan.pcd &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;c:\_git\PointCloudAnalyser\PcdData\test_pcd_file.pcd&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="placeholderText">
        <string>** place the path to the *.pcd file here, than press Load PCD **</string>
@@ -64,6 +64,13 @@ p, li { white-space: pre-wrap; }
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionLoad_PCD"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -74,12 +81,9 @@ p, li { white-space: pre-wrap; }
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionLoadPcd">
+  <action name="actionLoad_PCD">
    <property name="text">
-    <string>LoadPcd</string>
-   </property>
-   <property name="toolTip">
-    <string>This loads the PCD file to the 3D View</string>
+    <string>Load PCD</string>
    </property>
   </action>
  </widget>
@@ -94,5 +98,22 @@ p, li { white-space: pre-wrap; }
  <resources>
   <include location="PCAViewer.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnLoadPcd</sender>
+   <signal>clicked()</signal>
+   <receiver>actionLoad_PCD</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>599</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
