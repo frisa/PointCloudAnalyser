@@ -4,6 +4,7 @@
 #include "ui_PCAViewer.h"
 #include "vtkGenericOpenGLRenderWindow.h"
 #include "vtkSmartPointer.h"
+#include "Logger.h"
 
 class PCAViewer : public QMainWindow
 {
@@ -17,6 +18,7 @@ private:
 	Ui::PCAViewerClass ui;
 	void setupVtk();
 	void connectActions();
+	Logger _log;
 
 public slots:
 	void loadPcdFile();

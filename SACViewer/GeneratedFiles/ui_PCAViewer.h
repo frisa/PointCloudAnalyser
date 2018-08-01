@@ -14,9 +14,11 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
@@ -33,8 +35,10 @@ public:
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTextEdit *tbPcdFilePath;
-    QPushButton *btnLoadPcd;
     QVTKOpenGLWidget *openGLWidget;
+    QPushButton *btnLoadPcd;
+    QPlainTextEdit *tbLog;
+    QLabel *label;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -44,10 +48,11 @@ public:
     {
         if (PCAViewerClass->objectName().isEmpty())
             PCAViewerClass->setObjectName(QStringLiteral("PCAViewerClass"));
-        PCAViewerClass->resize(646, 515);
+        PCAViewerClass->resize(1021, 726);
         QIcon icon;
         icon.addFile(QStringLiteral(":/Icons/E:/icons/if_cloud_1805075.ico"), QSize(), QIcon::Normal, QIcon::Off);
         PCAViewerClass->setWindowIcon(icon);
+        PCAViewerClass->setLayoutDirection(Qt::LeftToRight);
         actionLoad_PCD = new QAction(PCAViewerClass);
         actionLoad_PCD->setObjectName(QStringLiteral("actionLoad_PCD"));
         centralWidget = new QWidget(PCAViewerClass);
@@ -62,6 +67,11 @@ public:
 
         gridLayout->addWidget(tbPcdFilePath, 0, 0, 1, 1);
 
+        openGLWidget = new QVTKOpenGLWidget(centralWidget);
+        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
+
+        gridLayout->addWidget(openGLWidget, 1, 0, 1, 2);
+
         btnLoadPcd = new QPushButton(centralWidget);
         btnLoadPcd->setObjectName(QStringLiteral("btnLoadPcd"));
         QIcon icon1;
@@ -70,15 +80,23 @@ public:
 
         gridLayout->addWidget(btnLoadPcd, 0, 1, 1, 1);
 
-        openGLWidget = new QVTKOpenGLWidget(centralWidget);
-        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
+        tbLog = new QPlainTextEdit(centralWidget);
+        tbLog->setObjectName(QStringLiteral("tbLog"));
+        tbLog->setMaximumSize(QSize(200, 16777215));
 
-        gridLayout->addWidget(openGLWidget, 1, 0, 1, 2);
+        gridLayout->addWidget(tbLog, 1, 3, 1, 1);
+
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setMaximumSize(QSize(200, 16777215));
+        label->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(label, 0, 3, 1, 1);
 
         PCAViewerClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PCAViewerClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 646, 21));
+        menuBar->setGeometry(QRect(0, 0, 1021, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         PCAViewerClass->setMenuBar(menuBar);
@@ -109,6 +127,7 @@ public:
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\PointCloudAnalyser\\PcdData\\test_pcd_file.pcd</p></body></html>", nullptr));
         tbPcdFilePath->setPlaceholderText(QApplication::translate("PCAViewerClass", "** place the path to the *.pcd file here, than press Load PCD **", nullptr));
         btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
+        label->setText(QApplication::translate("PCAViewerClass", "Log Window", nullptr));
         menuFile->setTitle(QApplication::translate("PCAViewerClass", "File", nullptr));
     } // retranslateUi
 

@@ -10,14 +10,17 @@ PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	_log.init(ui.tbLog->document());
+	_log.log("Logger initialization -> OK");
 	setupVtk();
 	connectActions();
 }
 
 void PCAViewer::loadPcdFile()
 {
-	PclPersistor pclPers;
+	PclPersistor pclPers(&_log);
 	pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText());
+	_log.log("Load PCD -> OK");
 }
 
 void PCAViewer::setupVtk()
@@ -40,9 +43,11 @@ void PCAViewer::setupVtk()
 	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	_window->AddRenderer(renderer);
 	ui.openGLWidget->SetRenderWindow(_window.Get());
+	_log.log("The initialization of VTK -> OK");
 }
 
 void PCAViewer::connectActions()
 {
 	connect(ui.actionLoad_PCD, &QAction::triggered, this, &PCAViewer::loadPcdFile);
+	_log.log("The signal connection -> OK");
 }

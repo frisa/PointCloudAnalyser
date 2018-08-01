@@ -39,6 +39,9 @@
     <ClCompile Include="PclPersistor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="PCAViewer.ui">
@@ -50,6 +53,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="PclPersistor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Logger.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
