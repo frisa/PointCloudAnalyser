@@ -5,6 +5,8 @@
 #include "vtkPolyDataMapper.h"
 #include "vtkCylinderSource.h"
 
+#include <pcl/io/pcd_io.h>
+
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -36,5 +38,7 @@ void PCAViewer::setupVtk()
 
 bool PCAViewer::loadPcdToViewer(QString pcdFilePath)
 {
-	return false;
+	pcl::PCLPointCloud2 cloud;
+	//pcl::io::loadPCDFile(pcdFilePath.toStdString(), cloud);
+	return true;
 }
