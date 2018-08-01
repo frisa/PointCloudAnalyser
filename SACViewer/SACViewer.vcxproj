@@ -102,6 +102,7 @@ opengl32.lib;
 glu32.lib;
 Qt5Widgetsd.lib;
 %(AdditionalDependencies);
+c:\PCL\PCL 1.8.1\lib\pcl_visualization_debug.lib;
 C:\PCL\PCL 1.8.1\3rdParty\Boost\lib\libboost_system-vc141-mt-gd-1_64.lib;
 C:\PCL\PCL 1.8.1\3rdParty\Boost\lib\libboost_filesystem-vc141-mt-gd-1_64.lib;
 C:\PCL\PCL 1.8.1\3rdParty\Boost\lib\libboost_thread-vc141-mt-gd-1_64.lib;

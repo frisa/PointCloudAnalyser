@@ -1,6 +1,8 @@
 #pragma once
 #include <QObject>
 #include "Logger.h"
+#include <pcl/point_types.h>
+#include <pcl/common/projection_matrix.h>
 
 class PclPersistor : public QObject
 {
@@ -13,6 +15,6 @@ public:
 	~PclPersistor();
 
 public slots:
-	bool loadPcdToCloud(QString pcdFilePath);
+	bool loadPcdToCloud(QString pcdFilePath, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 };
 

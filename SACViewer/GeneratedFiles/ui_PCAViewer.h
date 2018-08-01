@@ -14,6 +14,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -32,13 +33,16 @@ class Ui_PCAViewerClass
 {
 public:
     QAction *actionLoad_PCD;
+    QAction *actionGenerate_PCD;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
-    QTextEdit *tbPcdFilePath;
-    QVTKOpenGLWidget *openGLWidget;
-    QPushButton *btnLoadPcd;
-    QPlainTextEdit *tbLog;
     QLabel *label;
+    QTextEdit *tbPcdFilePath;
+    QPlainTextEdit *tbLog;
+    QVTKOpenGLWidget *openGLWidget;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *btnGeneratePcd;
+    QPushButton *btnLoadPcd;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -55,43 +59,57 @@ public:
         PCAViewerClass->setLayoutDirection(Qt::LeftToRight);
         actionLoad_PCD = new QAction(PCAViewerClass);
         actionLoad_PCD->setObjectName(QStringLiteral("actionLoad_PCD"));
+        actionGenerate_PCD = new QAction(PCAViewerClass);
+        actionGenerate_PCD->setObjectName(QStringLiteral("actionGenerate_PCD"));
         centralWidget = new QWidget(PCAViewerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        tbPcdFilePath = new QTextEdit(centralWidget);
-        tbPcdFilePath->setObjectName(QStringLiteral("tbPcdFilePath"));
-        tbPcdFilePath->setMaximumSize(QSize(16777215, 30));
-
-        gridLayout->addWidget(tbPcdFilePath, 0, 0, 1, 1);
-
-        openGLWidget = new QVTKOpenGLWidget(centralWidget);
-        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-
-        gridLayout->addWidget(openGLWidget, 1, 0, 1, 2);
-
-        btnLoadPcd = new QPushButton(centralWidget);
-        btnLoadPcd->setObjectName(QStringLiteral("btnLoadPcd"));
-        QIcon icon1;
-        icon1.addFile(QStringLiteral(":/Icons/E:/icons/if_3d_objects_102518.ico"), QSize(), QIcon::Normal, QIcon::Off);
-        btnLoadPcd->setIcon(icon1);
-
-        gridLayout->addWidget(btnLoadPcd, 0, 1, 1, 1);
-
-        tbLog = new QPlainTextEdit(centralWidget);
-        tbLog->setObjectName(QStringLiteral("tbLog"));
-        tbLog->setMaximumSize(QSize(200, 16777215));
-
-        gridLayout->addWidget(tbLog, 1, 3, 1, 1);
-
         label = new QLabel(centralWidget);
         label->setObjectName(QStringLiteral("label"));
         label->setMaximumSize(QSize(200, 16777215));
         label->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(label, 0, 3, 1, 1);
+        gridLayout->addWidget(label, 0, 2, 1, 1);
+
+        tbPcdFilePath = new QTextEdit(centralWidget);
+        tbPcdFilePath->setObjectName(QStringLiteral("tbPcdFilePath"));
+        tbPcdFilePath->setMaximumSize(QSize(16777215, 30));
+
+        gridLayout->addWidget(tbPcdFilePath, 0, 0, 1, 2);
+
+        tbLog = new QPlainTextEdit(centralWidget);
+        tbLog->setObjectName(QStringLiteral("tbLog"));
+        tbLog->setMaximumSize(QSize(200, 16777215));
+
+        gridLayout->addWidget(tbLog, 2, 2, 1, 1);
+
+        openGLWidget = new QVTKOpenGLWidget(centralWidget);
+        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
+
+        gridLayout->addWidget(openGLWidget, 2, 0, 1, 2);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        btnGeneratePcd = new QPushButton(centralWidget);
+        btnGeneratePcd->setObjectName(QStringLiteral("btnGeneratePcd"));
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/Icons/E:/icons/if_3d_objects_102518.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        btnGeneratePcd->setIcon(icon1);
+
+        horizontalLayout->addWidget(btnGeneratePcd);
+
+        btnLoadPcd = new QPushButton(centralWidget);
+        btnLoadPcd->setObjectName(QStringLiteral("btnLoadPcd"));
+        btnLoadPcd->setIcon(icon1);
+
+        horizontalLayout->addWidget(btnLoadPcd);
+
+
+        gridLayout->addLayout(horizontalLayout, 1, 0, 1, 2);
 
         PCAViewerClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(PCAViewerClass);
@@ -109,9 +127,11 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuFile->addAction(actionLoad_PCD);
+        menuFile->addAction(actionGenerate_PCD);
 
         retranslateUi(PCAViewerClass);
         QObject::connect(btnLoadPcd, SIGNAL(clicked()), actionLoad_PCD, SLOT(trigger()));
+        QObject::connect(btnGeneratePcd, SIGNAL(clicked()), actionGenerate_PCD, SLOT(trigger()));
 
         QMetaObject::connectSlotsByName(PCAViewerClass);
     } // setupUi
@@ -120,14 +140,16 @@ public:
     {
         PCAViewerClass->setWindowTitle(QApplication::translate("PCAViewerClass", "Point Cloud Analyser", nullptr));
         actionLoad_PCD->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
+        actionGenerate_PCD->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
+        label->setText(QApplication::translate("PCAViewerClass", "Log Window", nullptr));
         tbPcdFilePath->setHtml(QApplication::translate("PCAViewerClass", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\PointCloudAnalyser\\PcdData\\test_pcd_file.pcd</p></body></html>", nullptr));
         tbPcdFilePath->setPlaceholderText(QApplication::translate("PCAViewerClass", "** place the path to the *.pcd file here, than press Load PCD **", nullptr));
+        btnGeneratePcd->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
         btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
-        label->setText(QApplication::translate("PCAViewerClass", "Log Window", nullptr));
         menuFile->setTitle(QApplication::translate("PCAViewerClass", "File", nullptr));
     } // retranslateUi
 
