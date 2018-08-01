@@ -33,3 +33,8 @@ void PCAViewer::setupVtk()
 	_window->AddRenderer(renderer);
 	ui.openGLWidget->SetRenderWindow(_window.Get());
 }
+
+bool PCAViewer::loadPcdToViewer(QString pcdFilePath)
+{
+	return false;
+}

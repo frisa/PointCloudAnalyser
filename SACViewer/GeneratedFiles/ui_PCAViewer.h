@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
@@ -27,6 +28,7 @@ QT_BEGIN_NAMESPACE
 class Ui_PCAViewerClass
 {
 public:
+    QAction *actionLoadPcd;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTextEdit *tbPcdFilePath;
@@ -44,6 +46,8 @@ public:
         QIcon icon;
         icon.addFile(QStringLiteral(":/Icons/E:/icons/if_cloud_1805075.ico"), QSize(), QIcon::Normal, QIcon::Off);
         PCAViewerClass->setWindowIcon(icon);
+        actionLoadPcd = new QAction(PCAViewerClass);
+        actionLoadPcd->setObjectName(QStringLiteral("actionLoadPcd"));
         centralWidget = new QWidget(PCAViewerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -89,6 +93,10 @@ public:
     void retranslateUi(QMainWindow *PCAViewerClass)
     {
         PCAViewerClass->setWindowTitle(QApplication::translate("PCAViewerClass", "Point Cloud Analyser", nullptr));
+        actionLoadPcd->setText(QApplication::translate("PCAViewerClass", "LoadPcd", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionLoadPcd->setToolTip(QApplication::translate("PCAViewerClass", "This loads the PCD file to the 3D View", nullptr));
+#endif // QT_NO_TOOLTIP
         tbPcdFilePath->setHtml(QApplication::translate("PCAViewerClass", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
