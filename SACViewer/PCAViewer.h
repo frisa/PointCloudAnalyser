@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_PCAViewer.h"
 #include "vtkGenericOpenGLRenderWindow.h"
+#include "vtkSmartPointer.h"
 
 class PCAViewer : public QMainWindow
 {
