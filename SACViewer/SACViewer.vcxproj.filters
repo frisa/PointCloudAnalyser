@@ -36,10 +36,10 @@
     <ClCompile Include="PCAViewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PclPersistor.cpp">
+    <ClCompile Include="Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
+    <ClCompile Include="PclPersistor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -52,10 +52,10 @@
     <QtMoc Include="PCAViewer.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="PclPersistor.h">
+    <QtMoc Include="Logger.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Logger.h">
+    <QtMoc Include="PclPersistor.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

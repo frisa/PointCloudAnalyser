@@ -1,14 +1,9 @@
 #include "PCAViewer.h"
 #include "vtkRenderer.h"
-#include "vtkGenericOpenGLRenderWindow.h"
 #include "vtkSphereSource.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkCylinderSource.h"
 #include "PclPersistor.h"
-
-#include <pcl/point_types.h>
-#include <pcl/common/projection_matrix.h>
-#include <pcl/io/pcd_io.h>
 
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
@@ -22,30 +17,43 @@ PCAViewer::PCAViewer(QWidget *parent)
 
 void PCAViewer::loadPcdFile()
 {
-	PclPersistor pclPers(&_log);
-	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-
-	pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText(), cloud);
-	_log.log("Load PCD -> OK");
-
-	_pclVisualizer = new pcl::visualization::PCLVisualizer("view", false);
+	_renderer = vtkSmartPointer<vtkRenderer>::New();
+	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+	_window->AddRenderer(_renderer);
+	_pclVisualizer.reset(new pcl::visualization::PCLVisualizer(_renderer, _window, "viewer", false));
 	ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
-	ui.openGLWidget->show();
 	ui.openGLWidget->update();
 
-	if (!cloud->empty())
-	{
-		if (!_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0")) {
-			//_pclVisualizer->addPointCloud<pcl::PointXYZ>(cloud, "cloud0");
-		}
-		else {
-			//_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0");
-		}
-		ui.openGLWidget->update();
-	}
-	else {
-		std::cerr << "There is nothing to add to the visualizer!" << std::endl;
-	}
+	
+	//ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
+	//_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
+	//_pclVisualizer->addPointCloud(_pointCloud, "cloud");
+	//_pclVisualizer->resetCamera();
+	//ui.openGLWidget->update();
+
+	//PclPersistor pclPers(&_log);
+
+	//pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText(), cloud);
+	//_log.log("Load PCD -> OK");
+
+	//_pclVisualizer = new pcl::visualization::PCLVisualizer("view", false);
+	//ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
+	//ui.openGLWidget->show();
+	//ui.openGLWidget->update();
+
+	//if (!cloud->empty())
+	//{
+	//	if (!_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0")) {
+	//		//_pclVisualizer->addPointCloud<pcl::PointXYZ>(cloud, "cloud0");
+	//	}
+	//	else {
+	//		//_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0");
+	//	}
+	//	ui.openGLWidget->update();
+	//}
+	//else {
+	//	std::cerr << "There is nothing to add to the visualizer!" << std::endl;
+	//}
 
 
 }
@@ -66,6 +74,8 @@ void PCAViewer::setupVtk()
 
 	_renderer = vtkSmartPointer<vtkRenderer>::New();
 	_renderer->AddActor(actor);
+	_renderer->SetBackground(0.27, 0.27, 0.27);
+	_renderer->SetBackground2(0.44, 0.44, 0.44);
 
 	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	_window->AddRenderer(_renderer);
@@ -76,31 +86,39 @@ void PCAViewer::setupVtk()
 void PCAViewer::connectActions()
 {
 	connect(ui.actionLoad_PCD, &QAction::triggered, this, &PCAViewer::loadPcdFile);
-	connect(ui.actionGenerate_PCD, &QAction::triggered, this, &PCAViewer::loadPcdFile);
+	connect(ui.actionGenerate_PCD, &QAction::triggered, this, &PCAViewer::generatePcdFile);
 	_log.log("The signal connection -> OK");
 }
 
 void PCAViewer::generatePcdFile()
 {
-	pcl::PointCloud<pcl::PointXYZ> cloud;
+	unsigned int red;
+	unsigned int green;
+	unsigned int blue;
 
-	cloud.width = 5;
-	cloud.height = 1;
-	cloud.is_dense = false;
-	cloud.points.resize(cloud.width * cloud.height);
+	// The default color
+	red = 128;
+	green = 128;
+	blue = 128;
 
-	for (size_t i = 0; i < cloud.points.size(); ++i)
+	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>);
+	_pointCloud->points.resize(200);
+	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
 	{
-		cloud.points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
-		cloud.points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
-		cloud.points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
+		_pointCloud->points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
+		_pointCloud->points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
+		_pointCloud->points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
+
+		_pointCloud->points[i].r = red;
+		_pointCloud->points[i].g = green;
+		_pointCloud->points[i].b = blue;
 	}
 
-	pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), cloud);
-	_log.log("Saved: " + QString::number(cloud.points.size()));
+	//pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), _pointCloud.get());
+	_log.log("Saved: " + QString::number(_pointCloud->points.size()));
 
-	for (size_t i = 0; i < cloud.points.size(); ++i)
-	{
-		_log.log("[" + QString::number(cloud.points[i].x) + "," + QString::number(cloud.points[i].y) + "," + QString::number(cloud.points[i].z) + "]");
-	}
+	//for (size_t i = 0; i < _pointCloud->points.size(); ++i)
+	//{
+	//	_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
+	//}
 }
