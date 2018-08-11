@@ -34,6 +34,8 @@ class Ui_PCAViewerClass
 public:
     QAction *actionLoad_PCD;
     QAction *actionGenerate_PCD;
+    QAction *actionShowLogo;
+    QAction *actionSaveImage;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QLabel *label;
@@ -41,8 +43,10 @@ public:
     QPlainTextEdit *tbLog;
     QVTKOpenGLWidget *openGLWidget;
     QHBoxLayout *horizontalLayout;
+    QPushButton *btnLogo;
     QPushButton *btnGeneratePcd;
     QPushButton *btnLoadPcd;
+    QPushButton *btnBmp;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -61,6 +65,11 @@ public:
         actionLoad_PCD->setObjectName(QStringLiteral("actionLoad_PCD"));
         actionGenerate_PCD = new QAction(PCAViewerClass);
         actionGenerate_PCD->setObjectName(QStringLiteral("actionGenerate_PCD"));
+        actionShowLogo = new QAction(PCAViewerClass);
+        actionShowLogo->setObjectName(QStringLiteral("actionShowLogo"));
+        actionShowLogo->setIcon(icon);
+        actionSaveImage = new QAction(PCAViewerClass);
+        actionSaveImage->setObjectName(QStringLiteral("actionSaveImage"));
         centralWidget = new QWidget(PCAViewerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -94,6 +103,12 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        btnLogo = new QPushButton(centralWidget);
+        btnLogo->setObjectName(QStringLiteral("btnLogo"));
+        btnLogo->setIcon(icon);
+
+        horizontalLayout->addWidget(btnLogo);
+
         btnGeneratePcd = new QPushButton(centralWidget);
         btnGeneratePcd->setObjectName(QStringLiteral("btnGeneratePcd"));
         QIcon icon1;
@@ -107,6 +122,14 @@ public:
         btnLoadPcd->setIcon(icon1);
 
         horizontalLayout->addWidget(btnLoadPcd);
+
+        btnBmp = new QPushButton(centralWidget);
+        btnBmp->setObjectName(QStringLiteral("btnBmp"));
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/Icons/E:/icons/if_bmp_7062.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        btnBmp->setIcon(icon2);
+
+        horizontalLayout->addWidget(btnBmp);
 
 
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 2);
@@ -132,6 +155,8 @@ public:
         retranslateUi(PCAViewerClass);
         QObject::connect(btnLoadPcd, SIGNAL(clicked()), actionLoad_PCD, SLOT(trigger()));
         QObject::connect(btnGeneratePcd, SIGNAL(clicked()), actionGenerate_PCD, SLOT(trigger()));
+        QObject::connect(btnLogo, SIGNAL(clicked()), actionShowLogo, SLOT(trigger()));
+        QObject::connect(btnBmp, SIGNAL(clicked()), actionSaveImage, SLOT(trigger()));
 
         QMetaObject::connectSlotsByName(PCAViewerClass);
     } // setupUi
@@ -141,6 +166,8 @@ public:
         PCAViewerClass->setWindowTitle(QApplication::translate("PCAViewerClass", "Point Cloud Analyser", nullptr));
         actionLoad_PCD->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
         actionGenerate_PCD->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
+        actionShowLogo->setText(QApplication::translate("PCAViewerClass", "ShowLogo", nullptr));
+        actionSaveImage->setText(QApplication::translate("PCAViewerClass", "SaveImage", nullptr));
         label->setText(QApplication::translate("PCAViewerClass", "Log Window", nullptr));
         tbPcdFilePath->setHtml(QApplication::translate("PCAViewerClass", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -148,8 +175,10 @@ public:
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\PointCloudAnalyser\\PcdData\\test_pcd_file.pcd</p></body></html>", nullptr));
         tbPcdFilePath->setPlaceholderText(QApplication::translate("PCAViewerClass", "** place the path to the *.pcd file here, than press Load PCD **", nullptr));
+        btnLogo->setText(QApplication::translate("PCAViewerClass", "Show Logo", nullptr));
         btnGeneratePcd->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
         btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
+        btnBmp->setText(QApplication::translate("PCAViewerClass", "Save Image", nullptr));
         menuFile->setTitle(QApplication::translate("PCAViewerClass", "File", nullptr));
     } // retranslateUi
 

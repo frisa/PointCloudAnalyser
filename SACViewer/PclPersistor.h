@@ -15,6 +15,6 @@ public:
 	~PclPersistor();
 
 public slots:
-	bool loadPcdToCloud(QString pcdFilePath, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
+	bool loadPcdToCloud(QString pcdFilePath, pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud);
 };
 

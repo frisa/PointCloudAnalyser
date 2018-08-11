@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="SACViewer"/>
   <qresource prefix="Icons">
+    <file>E:/icons/if_bmp_7062.ico</file>
     <file>E:/icons/if_3d_objects_102518.ico</file>
     <file>E:/icons/if_cloud_1805075.ico</file>
   </qresource>

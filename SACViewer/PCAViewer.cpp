@@ -5,60 +5,27 @@
 #include "vtkCylinderSource.h"
 #include "PclPersistor.h"
 
+#include "boost\smart_ptr\shared_ptr.hpp"
+#include "boost\smart_ptr\make_shared_object.hpp"
+
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
 	_log.init(ui.tbLog->document());
 	_log.log("Logger initialization -> OK");
-	setupVtk();
+	initPclVtk();
 	connectActions();
 }
 
-void PCAViewer::loadPcdFile()
+void PCAViewer::saveContent()
 {
-	_renderer = vtkSmartPointer<vtkRenderer>::New();
-	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
-	_window->AddRenderer(_renderer);
-	_pclVisualizer.reset(new pcl::visualization::PCLVisualizer(_renderer, _window, "viewer", false));
-	ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
-	ui.openGLWidget->update();
-
-	
-	//ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
-	//_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
-	//_pclVisualizer->addPointCloud(_pointCloud, "cloud");
-	//_pclVisualizer->resetCamera();
-	//ui.openGLWidget->update();
-
-	//PclPersistor pclPers(&_log);
-
-	//pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText(), cloud);
-	//_log.log("Load PCD -> OK");
-
-	//_pclVisualizer = new pcl::visualization::PCLVisualizer("view", false);
-	//ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
-	//ui.openGLWidget->show();
-	//ui.openGLWidget->update();
-
-	//if (!cloud->empty())
-	//{
-	//	if (!_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0")) {
-	//		//_pclVisualizer->addPointCloud<pcl::PointXYZ>(cloud, "cloud0");
-	//	}
-	//	else {
-	//		//_pclVisualizer->updatePointCloud<pcl::PointXYZ>(cloud, "cloud0");
-	//	}
-	//	ui.openGLWidget->update();
-	//}
-	//else {
-	//	std::cerr << "There is nothing to add to the visualizer!" << std::endl;
-	//}
-
-
+	QImage frameBuffer;
+	frameBuffer = ui.openGLWidget->grabFramebuffer();
+	frameBuffer.save("e:\\fb.bmp");
 }
 
-void PCAViewer::setupVtk()
+void PCAViewer::ShowLogo()
 {
 	auto cylinderSource = vtkSmartPointer<vtkCylinderSource>::New();
 	cylinderSource->SetCenter(0.0, 0.0, 0.0);
@@ -74,19 +41,61 @@ void PCAViewer::setupVtk()
 
 	_renderer = vtkSmartPointer<vtkRenderer>::New();
 	_renderer->AddActor(actor);
-	_renderer->SetBackground(0.27, 0.27, 0.27);
-	_renderer->SetBackground2(0.44, 0.44, 0.44);
+	_renderer->SetBackground(0.0, 1.0, 0.0);
 
 	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
 	_window->AddRenderer(_renderer);
 	ui.openGLWidget->SetRenderWindow(_window.Get());
-	_log.log("The initialization of VTK -> OK");
+	_log.log("The defualt cilinder in VTK -> OK");
+}
+
+void PCAViewer::initPclVtk()
+{
+	bool ret{ true };
+
+	// Setup Rendered
+	_renderer = vtkSmartPointer<vtkRenderer>::New();
+	_renderer->SetBackground(0.0, 0.0, 1.0);
+
+	// Setup Window
+	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+	_window->AddRenderer(_renderer);
+
+	// Setup PCL visualizer
+	_pclVisualizer.reset(new pcl::visualization::PCLVisualizer(_renderer, _window, "viewer", false));
+	_pclVisualizer->resetCamera();
+	_pclVisualizer->setBackgroundColor(0.0, 0.0, 0.0);
+	ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
+	ui.openGLWidget->update();
+
+	// Create Default Point Cloud
+	generatePcdFile();
+	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGBA>(_pointCloud, "cloud");
+	_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
+	_pclVisualizer->getInteractorStyle()->setKeyboardModifier(pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
+	ui.openGLWidget->show();
+	ui.openGLWidget->update();
+
+	//PclPersistor pclPers(&_log);
+	//pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText(), _pointCloud);
+	_log.log("Load PCD -> OK");
+}
+
+void PCAViewer::loadPcdFile()
+{
+	generatePcdFile();
+	if (_pclVisualizer->updatePointCloud(_pointCloud, "cloud"))
+	{
+		ui.openGLWidget->update();
+	}
 }
 
 void PCAViewer::connectActions()
 {
 	connect(ui.actionLoad_PCD, &QAction::triggered, this, &PCAViewer::loadPcdFile);
 	connect(ui.actionGenerate_PCD, &QAction::triggered, this, &PCAViewer::generatePcdFile);
+	connect(ui.actionShowLogo, &QAction::triggered, this, &PCAViewer::ShowLogo);
+	connect(ui.actionSaveImage, &QAction::triggered, this, &PCAViewer::saveContent);
 	_log.log("The signal connection -> OK");
 }
 
@@ -97,9 +106,9 @@ void PCAViewer::generatePcdFile()
 	unsigned int blue;
 
 	// The default color
-	red = 128;
-	green = 128;
-	blue = 128;
+	red = rand() % 255;
+	green = rand() % 255;
+	blue = rand() % 255;
 
 	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>);
 	_pointCloud->points.resize(200);

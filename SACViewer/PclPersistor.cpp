@@ -17,10 +17,10 @@ PclPersistor::~PclPersistor()
 {
 }
 
-bool PclPersistor::loadPcdToCloud(QString pcdFilePath, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
+bool PclPersistor::loadPcdToCloud(QString pcdFilePath, pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud)
 {
 	_logger->log("Loading PCD file: " + pcdFilePath);
-	if (pcl::io::loadPCDFile<pcl::PointXYZ>(pcdFilePath.toStdString(), *cloud) == -1)
+	if (pcl::io::loadPCDFile<pcl::PointXYZRGBA>(pcdFilePath.toStdString(), *cloud) == -1)
 	{
 		_logger->log("Couldn't read pcd file: " + pcdFilePath);
 		return false;

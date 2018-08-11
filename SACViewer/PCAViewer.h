@@ -27,10 +27,12 @@ private:
 	Logger _log;
 
 	Ui::PCAViewerClass ui;
-	void setupVtk();
 	void connectActions();
 
 public slots:
-	void loadPcdFile();
+	void saveContent();
+	void ShowLogo();
+	void initPclVtk();
 	void generatePcdFile();
+	void loadPcdFile();
 };
