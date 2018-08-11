@@ -80,7 +80,7 @@ void PCAViewer::initPclVtk()
 	ui.openGLWidget->show();
 	ui.openGLWidget->update();
 
-	_log.log("Load PCD -> OK");
+	_log.log("Initialize VTK and PCD -> OK");
 }
 
 void PCAViewer::browsePcdFile()
@@ -95,9 +95,12 @@ void PCAViewer::loadPcdFile()
 	std::string sFilePath = filePath.toLocal8Bit().constData();
 	_log.log("Loading PCD file: " + filePath);
 	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
+	_log.log("Loading PCD file it will take longer time");
+	this->update();
 	if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(sFilePath, *_pointCloud) == -1)
 	{
 		_log.log("Couldn't read pcd file: " + filePath);
+		this->update();
 	}
 	else
 	{
@@ -106,15 +109,12 @@ void PCAViewer::loadPcdFile()
 		_log.log("cloud_height = " + QString::number(_pointCloud->height));
 		_log.log("cloud_size = " + QString::number(_pointCloud->size()));
 		_log.log("cloud_points = " + QString::number(_pointCloud->points.size()));
-
-		for (size_t i = 0; i < _pointCloud->points.size(); ++i)
-		{
-			_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
-		}
+		this->update();
 	}
 
 	if (_pclVisualizer->updatePointCloud(_pointCloud, "cloud"))
 	{
+		_pclVisualizer->resetCamera();
 		ui.openGLWidget->update();
 	}
 }
@@ -154,10 +154,10 @@ void PCAViewer::generatePcdFile()
 	}
 
 	//pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), _pointCloud.get());
-	_log.log("Saved: " + QString::number(_pointCloud->points.size()));
+	//_log.log("Saved: " + QString::number(_pointCloud->points.size()));
 
 	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
 	{
-		_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
+		_log.log("P[" + QString::number(i) + "]->[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
 	}
 }

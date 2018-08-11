@@ -140,7 +140,7 @@ public:
 
         tbLog = new QPlainTextEdit(centralWidget);
         tbLog->setObjectName(QStringLiteral("tbLog"));
-        tbLog->setMaximumSize(QSize(200, 16777215));
+        tbLog->setMaximumSize(QSize(220, 16777215));
 
         gridLayout->addWidget(tbLog, 3, 1, 5, 1);
 

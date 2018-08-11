@@ -149,7 +149,7 @@ p, li { white-space: pre-wrap; }
        <widget class="QPlainTextEdit" name="tbLog">
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>220</width>
           <height>16777215</height>
          </size>
         </property>
