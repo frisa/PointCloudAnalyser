@@ -22,7 +22,7 @@ private:
 	vtkSmartPointer<vtkRenderer> _renderer;
 
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> _pclVisualizer;
-	pcl::PointCloud<pcl::PointXYZRGBA>::Ptr _pointCloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr _pointCloud;
 
 	Logger _log;
 
@@ -35,4 +35,5 @@ public slots:
 	void initPclVtk();
 	void generatePcdFile();
 	void loadPcdFile();
+	void browsePcdFile();
 };

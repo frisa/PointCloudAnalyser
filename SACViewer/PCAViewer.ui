@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
-    <height>726</height>
+    <width>1045</width>
+    <height>881</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,60 +21,50 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
-     <widget class="QLabel" name="label">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Log Window</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QTextEdit" name="tbPcdFilePath">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;c:\_git\PointCloudAnalyser\PcdData\test_pcd_file.pcd&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="placeholderText">
-       <string>** place the path to the *.pcd file here, than press Load PCD **</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QPlainTextEdit" name="tbLog">
-      <property name="maximumSize">
-       <size>
-        <width>200</width>
-        <height>16777215</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="2">
-     <widget class="QVTKOpenGLWidget" name="openGLWidget"/>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="5" column="0">
+       <widget class="QPushButton" name="btnBmp">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Save Image</string>
+        </property>
+        <property name="icon">
+         <iconset resource="PCAViewer.qrc">
+          <normaloff>:/Icons/E:/icons/if_bmp_7062.ico</normaloff>:/Icons/E:/icons/if_bmp_7062.ico</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>PCD File Path:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
        <widget class="QPushButton" name="btnLogo">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>23</height>
+         </size>
+        </property>
         <property name="text">
          <string>Show Logo</string>
         </property>
@@ -84,19 +74,68 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="3">
+       <widget class="QTextEdit" name="tbFsdFilesDirectory">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;c:\_git\PointCloudAnalyser\PcdData\filtered_scan.pcd&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="placeholderText">
+         <string>** place the path to the *.pcd file here, than press Load PCD **</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="btnPCDFile">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>23</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Browse PCD File</string>
+        </property>
+        <property name="icon">
+         <iconset resource="PCAViewer.qrc">
+          <normaloff>:/Icons/E:/icons/if_Open_1493293.ico</normaloff>:/Icons/E:/icons/if_Open_1493293.ico</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
        <widget class="QPushButton" name="btnGeneratePcd">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>23</height>
+         </size>
+        </property>
         <property name="text">
          <string>Generate PCD</string>
         </property>
         <property name="icon">
          <iconset resource="PCAViewer.qrc">
-          <normaloff>:/Icons/E:/icons/if_3d_objects_102518.ico</normaloff>:/Icons/E:/icons/if_3d_objects_102518.ico</iconset>
+          <normaloff>:/Icons/E:/icons/if_Dice_128401.ico</normaloff>:/Icons/E:/icons/if_Dice_128401.ico</iconset>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="3" column="0">
        <widget class="QPushButton" name="btnLoadPcd">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>23</height>
+         </size>
+        </property>
         <property name="text">
          <string>Load PCD</string>
         </property>
@@ -106,14 +145,35 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="btnBmp">
-        <property name="text">
-         <string>Save Image</string>
+      <item row="3" column="1" rowspan="5">
+       <widget class="QPlainTextEdit" name="tbLog">
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="icon">
-         <iconset resource="PCAViewer.qrc">
-          <normaloff>:/Icons/E:/icons/if_bmp_7062.ico</normaloff>:/Icons/E:/icons/if_bmp_7062.ico</iconset>
+       </widget>
+      </item>
+      <item row="3" column="3" rowspan="5">
+       <widget class="QVTKOpenGLWidget" name="openGLWidget">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -126,7 +186,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1021</width>
+     <width>1045</width>
      <height>21</height>
     </rect>
    </property>
@@ -170,6 +230,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionSaveImage">
    <property name="text">
     <string>SaveImage</string>
+   </property>
+  </action>
+  <action name="actionBrowsePCD">
+   <property name="text">
+    <string>BrowsePCD</string>
    </property>
   </action>
  </widget>
@@ -242,6 +307,22 @@ p, li { white-space: pre-wrap; }
     <hint type="sourcelabel">
      <x>707</x>
      <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnPCDFile</sender>
+   <signal>clicked()</signal>
+   <receiver>actionBrowsePCD</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

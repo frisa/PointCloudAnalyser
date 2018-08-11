@@ -1,12 +1,16 @@
+#include <QFileDialog>
+
 #include "PCAViewer.h"
 #include "vtkRenderer.h"
 #include "vtkSphereSource.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkCylinderSource.h"
-#include "PclPersistor.h"
 
 #include "boost\smart_ptr\shared_ptr.hpp"
 #include "boost\smart_ptr\make_shared_object.hpp"
+
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
 
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
@@ -70,20 +74,45 @@ void PCAViewer::initPclVtk()
 
 	// Create Default Point Cloud
 	generatePcdFile();
-	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGBA>(_pointCloud, "cloud");
+	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloud, "cloud");
 	_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
 	_pclVisualizer->getInteractorStyle()->setKeyboardModifier(pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
 	ui.openGLWidget->show();
 	ui.openGLWidget->update();
 
-	//PclPersistor pclPers(&_log);
-	//pclPers.loadPcdToCloud(ui.tbPcdFilePath->toPlainText(), _pointCloud);
 	_log.log("Load PCD -> OK");
+}
+
+void PCAViewer::browsePcdFile()
+{
+	QString dir = QFileDialog::getOpenFileName(this,tr("Open PCD File"), "",tr("PCD Files (*.pcd);;All Files (*)"));
+	ui.tbFsdFilesDirectory->setText(dir);
 }
 
 void PCAViewer::loadPcdFile()
 {
-	generatePcdFile();
+	QString filePath = ui.tbFsdFilesDirectory->toPlainText();
+	std::string sFilePath = filePath.toLocal8Bit().constData();
+	_log.log("Loading PCD file: " + filePath);
+	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
+	if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(sFilePath, *_pointCloud) == -1)
+	{
+		_log.log("Couldn't read pcd file: " + filePath);
+	}
+	else
+	{
+		_log.log("Loaded PCD file: " + filePath);
+		_log.log("cloud_width = " + QString::number(_pointCloud->width));
+		_log.log("cloud_height = " + QString::number(_pointCloud->height));
+		_log.log("cloud_size = " + QString::number(_pointCloud->size()));
+		_log.log("cloud_points = " + QString::number(_pointCloud->points.size()));
+
+		for (size_t i = 0; i < _pointCloud->points.size(); ++i)
+		{
+			_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
+		}
+	}
+
 	if (_pclVisualizer->updatePointCloud(_pointCloud, "cloud"))
 	{
 		ui.openGLWidget->update();
@@ -96,6 +125,7 @@ void PCAViewer::connectActions()
 	connect(ui.actionGenerate_PCD, &QAction::triggered, this, &PCAViewer::generatePcdFile);
 	connect(ui.actionShowLogo, &QAction::triggered, this, &PCAViewer::ShowLogo);
 	connect(ui.actionSaveImage, &QAction::triggered, this, &PCAViewer::saveContent);
+	connect(ui.actionBrowsePCD, &QAction::triggered, this, &PCAViewer::browsePcdFile);
 	_log.log("The signal connection -> OK");
 }
 
@@ -106,11 +136,11 @@ void PCAViewer::generatePcdFile()
 	unsigned int blue;
 
 	// The default color
-	red = rand() % 255;
-	green = rand() % 255;
-	blue = rand() % 255;
+	red = 255;
+	green = 120;
+	blue = 120;
 
-	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGBA>);
+	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
 	_pointCloud->points.resize(200);
 	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
 	{
@@ -126,8 +156,8 @@ void PCAViewer::generatePcdFile()
 	//pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), _pointCloud.get());
 	_log.log("Saved: " + QString::number(_pointCloud->points.size()));
 
-	//for (size_t i = 0; i < _pointCloud->points.size(); ++i)
-	//{
-	//	_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
-	//}
+	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
+	{
+		_log.log("[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
+	}
 }
