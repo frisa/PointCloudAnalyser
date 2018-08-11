@@ -369,6 +369,8 @@ c:\Program Files\PCL\lib\pcl_io_debug.lib;
 c:\Program Files\PCL\lib\pcl_octree_debug.lib;
 c:\Program Files\PCL\lib\pcl_common_debug.lib;
 c:\Program Files\PCL\lib\pcl_octree_debug.lib;
+c:\Program Files\PCL\lib\pcl_sample_consensus_debug.lib;
+c:\Program Files\PCL\lib\pcl_segmentation_debug.lib;
 C:\PCL\OpenNI2\Lib\OpenNI2.lib;
 c:\Program Files\Boost\lib\libboost_system-vc141-mt-gd-x64-1_67.lib;
 c:\Program Files\Boost\lib\libboost_filesystem-vc141-mt-gd-x64-1_67.lib;

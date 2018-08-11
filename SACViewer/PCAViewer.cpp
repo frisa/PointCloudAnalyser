@@ -11,6 +11,7 @@
 
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/segmentation/sac_segmentation.h>
 
 PCAViewer::PCAViewer(QWidget *parent)
 	: QMainWindow(parent)
@@ -53,13 +54,50 @@ void PCAViewer::ShowLogo()
 	_log.log("The defualt cilinder in VTK -> OK");
 }
 
+void PCAViewer::pclSampleConsensus()
+{
+	_pointCloudRed.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+	pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients);
+	pcl::PointIndices::Ptr inliers(new pcl::PointIndices);
+	// Create the segmentation object
+	pcl::SACSegmentation<pcl::PointXYZRGB> seg;
+	// Optional
+	seg.setOptimizeCoefficients(true);
+	// Mandatory
+	seg.setModelType(pcl::SACMODEL_PLANE);
+	seg.setMethodType(pcl::SAC_RANSAC);
+	seg.setDistanceThreshold(0.01);
+
+	seg.setInputCloud(_pointCloud);
+	seg.segment(*inliers, *coefficients);
+
+	if (inliers->indices.size() == 0)
+	{
+		PCL_ERROR("Could not estimate a planar model for the given dataset.");
+	}
+
+	for (size_t i = 0; i < inliers->indices.size(); ++i)
+	{
+		pcl::PointXYZRGB point;
+		point.x = _pointCloud->points[inliers->indices[i]].x;
+		point.y = _pointCloud->points[inliers->indices[i]].y;
+		point.z = _pointCloud->points[inliers->indices[i]].z;
+		point.rgb = 0xff0000;
+		_pointCloudRed->push_back(point);
+	}
+	_pointCloudRedId = "SampleConsensus";
+	_pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloudRed, _pointCloudRedId, 0);
+	_pclVisualizer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, _pointCloudRedId);
+}
+
 void PCAViewer::initPclVtk()
 {
 	bool ret{ true };
 
 	// Setup Rendered
 	_renderer = vtkSmartPointer<vtkRenderer>::New();
-	_renderer->SetBackground(0.0, 0.0, 1.0);
+	_renderer->SetBackground(0.0, 0.0, 0.0);
 
 	// Setup Window
 	_window = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
@@ -68,15 +106,20 @@ void PCAViewer::initPclVtk()
 	// Setup PCL visualizer
 	_pclVisualizer.reset(new pcl::visualization::PCLVisualizer(_renderer, _window, "viewer", false));
 	_pclVisualizer->resetCamera();
-	_pclVisualizer->setBackgroundColor(0.0, 0.0, 0.0);
+	double r = 0.0;
+	double g = 40.0 / 255.0;
+	double b = 70.0 / 255.0;
+	_pclVisualizer->setBackgroundColor(r, g, b);
 	ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
 	ui.openGLWidget->update();
 
 	// Create Default Point Cloud
 	generatePcdFile();
-	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloud, "cloud");
-	_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
-	_pclVisualizer->getInteractorStyle()->setKeyboardModifier(pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
+	_pointCloudId = "defaultCloud";
+	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloud, _pointCloudId, 0);
+	_pclVisualizer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, _pointCloudId);
+	//_pclVisualizer->setupInteractor(ui.openGLWidget->GetInteractor(), ui.openGLWidget->GetRenderWindow());
+	//_pclVisualizer->getInteractorStyle()->setKeyboardModifier(pcl::visualization::INTERACTOR_KB_MOD_SHIFT);
 	ui.openGLWidget->show();
 	ui.openGLWidget->update();
 
@@ -94,10 +137,11 @@ void PCAViewer::loadPcdFile()
 	QString filePath = ui.tbFsdFilesDirectory->toPlainText();
 	std::string sFilePath = filePath.toLocal8Bit().constData();
 	_log.log("Loading PCD file: " + filePath);
-	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr newCloud;
+	newCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
 	_log.log("Loading PCD file it will take longer time");
 	this->update();
-	if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(sFilePath, *_pointCloud) == -1)
+	if (pcl::io::loadPCDFile<pcl::PointXYZRGB>(sFilePath, *newCloud) == -1)
 	{
 		_log.log("Couldn't read pcd file: " + filePath);
 		this->update();
@@ -105,18 +149,28 @@ void PCAViewer::loadPcdFile()
 	else
 	{
 		_log.log("Loaded PCD file: " + filePath);
-		_log.log("cloud_width = " + QString::number(_pointCloud->width));
-		_log.log("cloud_height = " + QString::number(_pointCloud->height));
-		_log.log("cloud_size = " + QString::number(_pointCloud->size()));
-		_log.log("cloud_points = " + QString::number(_pointCloud->points.size()));
+		_log.log("cloud_width = " + QString::number(newCloud->width));
+		_log.log("cloud_height = " + QString::number(newCloud->height));
+		_log.log("cloud_size = " + QString::number(newCloud->size()));
+		_log.log("cloud_points = " + QString::number(newCloud->points.size()));
 		this->update();
 	}
-
-	if (_pclVisualizer->updatePointCloud(_pointCloud, "cloud"))
+	if (!newCloud->empty())
 	{
-		_pclVisualizer->resetCamera();
-		ui.openGLWidget->update();
+		if (_pclVisualizer->updatePointCloud(newCloud, sFilePath))
+		{
+			/* Just update the existing cloud */
+		}
+		else
+		{
+			_pointCloud = newCloud;
+			_pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloud, sFilePath, 0);
+			_pclVisualizer->removePointCloud(_pointCloudId, 0);
+			_pointCloudId = sFilePath;
+		}
 	}
+	_pclVisualizer->resetCamera();
+	ui.openGLWidget->update();
 }
 
 void PCAViewer::connectActions()
@@ -126,6 +180,8 @@ void PCAViewer::connectActions()
 	connect(ui.actionShowLogo, &QAction::triggered, this, &PCAViewer::ShowLogo);
 	connect(ui.actionSaveImage, &QAction::triggered, this, &PCAViewer::saveContent);
 	connect(ui.actionBrowsePCD, &QAction::triggered, this, &PCAViewer::browsePcdFile);
+
+	connect(ui.actionSampleConsensus, &QAction::triggered, this, &PCAViewer::pclSampleConsensus);
 	_log.log("The signal connection -> OK");
 }
 
@@ -136,9 +192,9 @@ void PCAViewer::generatePcdFile()
 	unsigned int blue;
 
 	// The default color
-	red = 255;
-	green = 120;
-	blue = 120;
+	red = 0;
+	green = 255;
+	blue = 0;
 
 	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
 	_pointCloud->points.resize(200);
@@ -152,12 +208,7 @@ void PCAViewer::generatePcdFile()
 		_pointCloud->points[i].g = green;
 		_pointCloud->points[i].b = blue;
 	}
-
+	_log.log("Default PCD generated -> OK");
 	//pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), _pointCloud.get());
 	//_log.log("Saved: " + QString::number(_pointCloud->points.size()));
-
-	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
-	{
-		_log.log("P[" + QString::number(i) + "]->[" + QString::number(_pointCloud->points[i].x) + "," + QString::number(_pointCloud->points[i].y) + "," + QString::number(_pointCloud->points[i].z) + "]");
-	}
 }

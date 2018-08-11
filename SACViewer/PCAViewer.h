@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <QtWidgets/QMainWindow>
 #include "ui_PCAViewer.h"
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -23,6 +24,9 @@ private:
 
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> _pclVisualizer;
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr _pointCloud;
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr _pointCloudRed;
+	std::string _pointCloudId;
+	std::string _pointCloudRedId;
 
 	Logger _log;
 
@@ -36,4 +40,6 @@ public slots:
 	void generatePcdFile();
 	void loadPcdFile();
 	void browsePcdFile();
+
+	void pclSampleConsensus();
 };

@@ -36,18 +36,20 @@ public:
     QAction *actionShowLogo;
     QAction *actionSaveImage;
     QAction *actionBrowsePCD;
+    QAction *actionSampleConsensus;
     QWidget *centralWidget;
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout;
     QPushButton *btnBmp;
-    QLabel *label;
-    QPushButton *btnLogo;
-    QTextEdit *tbFsdFilesDirectory;
     QPushButton *btnPCDFile;
     QPushButton *btnGeneratePcd;
+    QLabel *label;
     QPushButton *btnLoadPcd;
+    QTextEdit *tbFsdFilesDirectory;
     QPlainTextEdit *tbLog;
     QVTKOpenGLWidget *openGLWidget;
+    QPushButton *btnLogo;
+    QPushButton *pbSampleConsensus;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QToolBar *mainToolBar;
@@ -73,6 +75,8 @@ public:
         actionSaveImage->setObjectName(QStringLiteral("actionSaveImage"));
         actionBrowsePCD = new QAction(PCAViewerClass);
         actionBrowsePCD->setObjectName(QStringLiteral("actionBrowsePCD"));
+        actionSampleConsensus = new QAction(PCAViewerClass);
+        actionSampleConsensus->setObjectName(QStringLiteral("actionSampleConsensus"));
         centralWidget = new QWidget(PCAViewerClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout_2 = new QGridLayout(centralWidget);
@@ -90,26 +94,6 @@ public:
         btnBmp->setIcon(icon1);
 
         gridLayout->addWidget(btnBmp, 5, 0, 1, 1);
-
-        label = new QLabel(centralWidget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setMaximumSize(QSize(16777215, 23));
-        label->setAlignment(Qt::AlignCenter);
-
-        gridLayout->addWidget(label, 0, 1, 1, 1);
-
-        btnLogo = new QPushButton(centralWidget);
-        btnLogo->setObjectName(QStringLiteral("btnLogo"));
-        btnLogo->setMaximumSize(QSize(200, 23));
-        btnLogo->setIcon(icon);
-
-        gridLayout->addWidget(btnLogo, 6, 0, 1, 1);
-
-        tbFsdFilesDirectory = new QTextEdit(centralWidget);
-        tbFsdFilesDirectory->setObjectName(QStringLiteral("tbFsdFilesDirectory"));
-        tbFsdFilesDirectory->setMaximumSize(QSize(16777215, 23));
-
-        gridLayout->addWidget(tbFsdFilesDirectory, 0, 3, 1, 1);
 
         btnPCDFile = new QPushButton(centralWidget);
         btnPCDFile->setObjectName(QStringLiteral("btnPCDFile"));
@@ -129,6 +113,13 @@ public:
 
         gridLayout->addWidget(btnGeneratePcd, 4, 0, 1, 1);
 
+        label = new QLabel(centralWidget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setMaximumSize(QSize(16777215, 23));
+        label->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(label, 0, 1, 1, 1);
+
         btnLoadPcd = new QPushButton(centralWidget);
         btnLoadPcd->setObjectName(QStringLiteral("btnLoadPcd"));
         btnLoadPcd->setMaximumSize(QSize(200, 23));
@@ -138,11 +129,17 @@ public:
 
         gridLayout->addWidget(btnLoadPcd, 3, 0, 1, 1);
 
+        tbFsdFilesDirectory = new QTextEdit(centralWidget);
+        tbFsdFilesDirectory->setObjectName(QStringLiteral("tbFsdFilesDirectory"));
+        tbFsdFilesDirectory->setMaximumSize(QSize(16777215, 23));
+
+        gridLayout->addWidget(tbFsdFilesDirectory, 0, 3, 1, 1);
+
         tbLog = new QPlainTextEdit(centralWidget);
         tbLog->setObjectName(QStringLiteral("tbLog"));
         tbLog->setMaximumSize(QSize(220, 16777215));
 
-        gridLayout->addWidget(tbLog, 3, 1, 5, 1);
+        gridLayout->addWidget(tbLog, 3, 1, 6, 1);
 
         openGLWidget = new QVTKOpenGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
@@ -154,7 +151,23 @@ public:
         openGLWidget->setMinimumSize(QSize(0, 0));
         openGLWidget->setMaximumSize(QSize(16777215, 16777215));
 
-        gridLayout->addWidget(openGLWidget, 3, 3, 5, 1);
+        gridLayout->addWidget(openGLWidget, 3, 3, 6, 1);
+
+        btnLogo = new QPushButton(centralWidget);
+        btnLogo->setObjectName(QStringLiteral("btnLogo"));
+        btnLogo->setMaximumSize(QSize(200, 23));
+        btnLogo->setIcon(icon);
+
+        gridLayout->addWidget(btnLogo, 6, 0, 1, 1);
+
+        pbSampleConsensus = new QPushButton(centralWidget);
+        pbSampleConsensus->setObjectName(QStringLiteral("pbSampleConsensus"));
+        pbSampleConsensus->setMinimumSize(QSize(0, 0));
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/Images/E:/Images/sample_consensus_planes_cylinders.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pbSampleConsensus->setIcon(icon5);
+
+        gridLayout->addWidget(pbSampleConsensus, 7, 0, 1, 1);
 
 
         gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
@@ -183,6 +196,7 @@ public:
         QObject::connect(btnLogo, SIGNAL(clicked()), actionShowLogo, SLOT(trigger()));
         QObject::connect(btnBmp, SIGNAL(clicked()), actionSaveImage, SLOT(trigger()));
         QObject::connect(btnPCDFile, SIGNAL(clicked()), actionBrowsePCD, SLOT(trigger()));
+        QObject::connect(pbSampleConsensus, SIGNAL(clicked()), actionSampleConsensus, SLOT(trigger()));
 
         QMetaObject::connectSlotsByName(PCAViewerClass);
     } // setupUi
@@ -195,18 +209,20 @@ public:
         actionShowLogo->setText(QApplication::translate("PCAViewerClass", "ShowLogo", nullptr));
         actionSaveImage->setText(QApplication::translate("PCAViewerClass", "SaveImage", nullptr));
         actionBrowsePCD->setText(QApplication::translate("PCAViewerClass", "BrowsePCD", nullptr));
+        actionSampleConsensus->setText(QApplication::translate("PCAViewerClass", "SampleConsensus", nullptr));
         btnBmp->setText(QApplication::translate("PCAViewerClass", "Save Image", nullptr));
+        btnPCDFile->setText(QApplication::translate("PCAViewerClass", "Browse PCD File", nullptr));
+        btnGeneratePcd->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
         label->setText(QApplication::translate("PCAViewerClass", "PCD File Path:", nullptr));
-        btnLogo->setText(QApplication::translate("PCAViewerClass", "Show Logo", nullptr));
+        btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
         tbFsdFilesDirectory->setHtml(QApplication::translate("PCAViewerClass", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">c:\\_git\\PointCloudAnalyser\\PcdData\\filtered_scan.pcd</p></body></html>", nullptr));
         tbFsdFilesDirectory->setPlaceholderText(QApplication::translate("PCAViewerClass", "** place the path to the *.pcd file here, than press Load PCD **", nullptr));
-        btnPCDFile->setText(QApplication::translate("PCAViewerClass", "Browse PCD File", nullptr));
-        btnGeneratePcd->setText(QApplication::translate("PCAViewerClass", "Generate PCD", nullptr));
-        btnLoadPcd->setText(QApplication::translate("PCAViewerClass", "Load PCD", nullptr));
+        btnLogo->setText(QApplication::translate("PCAViewerClass", "Show Logo", nullptr));
+        pbSampleConsensus->setText(QApplication::translate("PCAViewerClass", "Sample Consensus", nullptr));
         menuFile->setTitle(QApplication::translate("PCAViewerClass", "File", nullptr));
     } // retranslateUi
 
