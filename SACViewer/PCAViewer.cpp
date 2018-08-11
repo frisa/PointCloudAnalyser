@@ -111,10 +111,10 @@ void PCAViewer::initPclVtk()
 	double b = 70.0 / 255.0;
 	_pclVisualizer->setBackgroundColor(r, g, b);
 	ui.openGLWidget->SetRenderWindow(_pclVisualizer->getRenderWindow());
-	ui.openGLWidget->update();
 
 	// Create Default Point Cloud
-	generatePcdFile();
+	//generatePcdFile();
+	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
 	_pointCloudId = "defaultCloud";
 	ret = _pclVisualizer->addPointCloud<pcl::PointXYZRGB>(_pointCloud, _pointCloudId, 0);
 	_pclVisualizer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, _pointCloudId);
@@ -187,26 +187,15 @@ void PCAViewer::connectActions()
 
 void PCAViewer::generatePcdFile()
 {
-	unsigned int red;
-	unsigned int green;
-	unsigned int blue;
-
-	// The default color
-	red = 0;
-	green = 255;
-	blue = 0;
-
-	_pointCloud.reset(new pcl::PointCloud<pcl::PointXYZRGB>);
-	_pointCloud->points.resize(200);
-	for (size_t i = 0; i < _pointCloud->points.size(); ++i)
+	
+	for (size_t i = 0; i < 1000; ++i)
 	{
-		_pointCloud->points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
-		_pointCloud->points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
-		_pointCloud->points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
-
-		_pointCloud->points[i].r = red;
-		_pointCloud->points[i].g = green;
-		_pointCloud->points[i].b = blue;
+		pcl::PointXYZRGB point;
+		point.x = 1024 * rand() / (RAND_MAX + 1.0f);
+		point.y = 1024 * rand() / (RAND_MAX + 1.0f);
+		point.z = 1024 * rand() / (RAND_MAX + 1.0f);
+		point.rgb = 0x00ff00;
+		_pointCloud->push_back(point);
 	}
 	_log.log("Default PCD generated -> OK");
 	//pcl::io::savePCDFileASCII(ui.tbPcdFilePath->toPlainText().toStdString(), _pointCloud.get());
