@@ -25,21 +25,25 @@ private:
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> _pclVisualizer;
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr _pointCloud;
 	pcl::PointCloud<pcl::PointXYZRGB>::Ptr _pointCloudRed;
-	std::string _pointCloudId;
-	std::string _pointCloudRedId;
+	std::string _pointCloudId{ "default" };
+	std::string _pointCloudRedId{"red"};
 
 	Logger _log;
-
 	Ui::PCAViewerClass ui;
 	void connectActions();
+	void initPclVtk();
 
 public slots:
-	void saveContent();
-	void ShowLogo();
-	void initPclVtk();
-	void generatePcdFile();
-	void loadPcdFile();
-	void browsePcdFile();
+	// Point Cloud Operations
+	void pcdGenDefCloudCube();
+	void pcdUpdateRedCloud();
+
+	// File Operations
+	void fileLoad();
+	void fileSave();
+	void fileBrowse();
+	void fileBmpExport();
 
 	void pclSampleConsensus();
+	void pclSACPlaneModel();
 };

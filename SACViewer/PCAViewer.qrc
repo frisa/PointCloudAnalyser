@@ -4,6 +4,8 @@
     <file>E:/Images/sample_consensus_planes_cylinders.png</file>
   </qresource>
   <qresource prefix="Icons">
+    <file>E:/icons/if_sync_1891404.ico</file>
+    <file>E:/icons/if_floppy_285657.ico</file>
     <file>E:/icons/if_Dice_128401.ico</file>
     <file>E:/icons/if_Open_1493293.ico</file>
     <file>E:/icons/if_bmp_7062.ico</file>

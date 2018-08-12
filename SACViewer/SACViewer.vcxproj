@@ -1161,14 +1161,17 @@ $(QTDIR)\include\QtWidgets;
       %(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalDependencies>
-	  c:\Program Files\PCL\lib\pcl_common_release.lib;
+c:\Program Files\PCL\lib\pcl_common_release.lib;
 c:\Program Files\PCL\lib\pcl_io_release.lib;
 c:\Program Files\PCL\lib\pcl_visualization_release.lib;
 c:\Program Files\PCL\lib\pcl_common_release.lib;
 c:\Program Files\PCL\lib\pcl_io_release.lib;
 c:\Program Files\PCL\lib\pcl_octree_release.lib;
+c:\Program Files\PCL\lib\pcl_kdtree_release.lib;
 c:\Program Files\PCL\lib\pcl_common_release.lib;
 c:\Program Files\PCL\lib\pcl_octree_release.lib;
+c:\Program Files\PCL\lib\pcl_sample_consensus_release.lib;
+c:\Program Files\PCL\lib\pcl_segmentation_release.lib;
 C:\PCL\OpenNI2\Lib\OpenNI2.lib;
 c:\Program Files\Boost\lib\libboost_system-vc141-mt-x64-1_67.lib;
 c:\Program Files\Boost\lib\libboost_filesystem-vc141-mt-x64-1_67.lib;
